@@ -37,6 +37,7 @@ jobs:
           # Install build tools
           apt install -y \
             sudo \
+            jq \
             make \
             clang \
             cmake \
