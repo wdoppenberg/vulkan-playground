@@ -48,10 +48,12 @@ jobs:
             build-essential
 
       - name: Install Vulkan SDK
+        env:
+          INSTALL_VULKAN_SCRIPT_PATH: ./.github/scripts/install_vulkan_sdk.sh
         shell: bash
         run: |
-          chmod -x ./install_vulkan_sdk.sh && echo "Script now executable"
-          .github/scripts/install_vulkan_sdk.sh
+          chmod -x $INSTALL_VULKAN_SCRIPT_PATH && echo "Script now executable"
+          $INSTALL_VULKAN_SCRIPT_PATH
 
       - name: Checkout
         uses: actions/checkout@v2
