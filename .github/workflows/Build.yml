@@ -76,17 +76,16 @@ jobs:
         run: |
           $INSTALL_VULKAN_SCRIPT_PATH
 
-      - name: Configure CMake
-        shell: bash
-        run: |
-
-          export CC=${{ matrix.config.cc }}
-          export CXX=${{ matrix.config.cxx }}
 
       - name: Build
         shell: bash
         run: |
+          export CC=${{ matrix.config.cc }}
+          export CXX=${{ matrix.config.cxx }}
           export VULKAN_SDK=${{github.workspace}}/VULKAN_SDK
+          export PATH=$VULKAN_SDK/bin:$PATH
+          export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
+          export VK_LAYER_PATH=$VULKAN_SDK/etc/explicit_layer.d
           cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
       - name: Prepare upload
