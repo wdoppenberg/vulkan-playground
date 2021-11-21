@@ -79,14 +79,15 @@ jobs:
       - name: Configure CMake
         shell: bash
         run: |
-          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
           export CC=${{ matrix.config.cc }}
           export CXX=${{ matrix.config.cxx }}
 
       - name: Build
         shell: bash
         run: |
-          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+          export VULKAN_SDK=${{github.workspace}}/VULKAN_SDK
+          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
       - name: Prepare upload
         run: |
