@@ -55,7 +55,6 @@ jobs:
           INSTALL_VULKAN_SCRIPT_PATH: .github/scripts/install_vulkan_sdk.sh
         shell: bash
         run: |
-          chmod -x $INSTALL_VULKAN_SCRIPT_PATH && echo "Script now executable"
           $INSTALL_VULKAN_SCRIPT_PATH
 
       - name: Configure CMake
