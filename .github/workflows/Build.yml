@@ -61,7 +61,10 @@ jobs:
             libxcb-util-dev \
             libxcb-xfixes0-dev \
             libxcb-xinerama0-dev \
-            libxcb-xkb-dev
+            libxcb-xkb-dev \
+            ninja-build \
+            libwayland-dev \
+            libxrandr-dev
 
       - name: Checkout
         uses: actions/checkout@v2
