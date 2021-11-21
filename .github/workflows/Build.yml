@@ -27,9 +27,6 @@ jobs:
 
     steps:
 
-      - name: Install Vulkan SDK
-        uses: humbletim/setup-vulkan-sdk@v1.0.3
-
       - name: Update environment
         shell: bash
         run: |
@@ -42,7 +39,17 @@ jobs:
             curl \
             git \
             gcc \
-            pkg-config
+            pkg-config \
+            build-essential \
+            libx11-xcb-dev \
+            libxkbcommon-dev \
+            libmirclient-dev \
+            libwayland-dev \
+            libxrandr-dev
+
+      - name: Install Vulkan SDK
+        uses: humbletim/setup-vulkan-sdk@v1.0.3
+
 
       - name: Checkout
         uses: actions/checkout@v2
