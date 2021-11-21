@@ -9,8 +9,6 @@ jobs:
     name: ${{ matrix.config.name }}
     runs-on: ubuntu-latest
     container: ubuntu:rolling
-    env:
-      DEBIAN_FRONTEND: "noninteractive"
     strategy:
       fail-fast: false
       matrix:
@@ -28,6 +26,10 @@ jobs:
           }
 
     steps:
+
+      - name: Install Vulkan SDK
+        uses: humbletim/setup-vulkan-sdk@v1.0.3
+
       - name: Update environment
         shell: bash
         run: |
@@ -41,9 +43,6 @@ jobs:
             git \
             gcc \
             pkg-config
-
-      - name: Install Vulkan SDK
-        uses: humbletim/setup-vulkan-sdk@v1.0.3
 
       - name: Checkout
         uses: actions/checkout@v2
