@@ -40,12 +40,7 @@ jobs:
             git \
             gcc \
             pkg-config \
-            build-essential \
-            libx11-xcb-dev \
-            libxkbcommon-dev \
-            libmirclient-dev \
-            libwayland-dev \
-            libxrandr-dev
+            build-essential
 
       - name: Install Vulkan SDK
         uses: humbletim/setup-vulkan-sdk@v1.0.3
