@@ -40,11 +40,12 @@ jobs:
             make \
             clang \
             cmake \
+            curl \
             wget \
             git \
             gcc \
-            pkg-config
-            curl
+            pkg-config \
+            build-essential
 
       - name: Install Vulkan SDK
         shell: bash
