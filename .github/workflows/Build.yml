@@ -33,9 +33,10 @@ jobs:
         shell: bash
         run: |
           # Update package lists
-          apt-get update -qq
+          apt update -qq
           # Install build tools
-          apt-get install -y \
+          apt install -y \
+            sudo \
             jq \
             make \
             clang \
