@@ -62,7 +62,6 @@ jobs:
             xkb-data \
             xorg-dev
 
->>>>>>> origin/master
       - name: Install Vulkan SDK
         shell: bash
         run: |
