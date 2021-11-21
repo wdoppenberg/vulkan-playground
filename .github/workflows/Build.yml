@@ -9,6 +9,8 @@ jobs:
     name: ${{ matrix.config.name }}
     runs-on: ubuntu-latest
     container: ubuntu:rolling
+    env:
+      DEBIAN_FRONTEND: noninteractive
     strategy:
       fail-fast: false
       matrix:
@@ -33,7 +35,7 @@ jobs:
           # Update package lists
           apt update -qq
           # Install build tools
-          apt install -y \
+          apt-get install -y \
             clang \
             cmake \
             curl \
