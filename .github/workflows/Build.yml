@@ -49,7 +49,7 @@ jobs:
 
       - name: Install Vulkan SDK
         env:
-          INSTALL_VULKAN_SCRIPT_PATH: ./.github/scripts/install_vulkan_sdk.sh
+          INSTALL_VULKAN_SCRIPT_PATH: ${{github.workspace}}/.github/scripts/install_vulkan_sdk.sh
         shell: bash
         run: |
           chmod -x $INSTALL_VULKAN_SCRIPT_PATH && echo "Script now executable"
