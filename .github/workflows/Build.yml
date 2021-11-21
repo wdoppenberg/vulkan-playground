@@ -50,6 +50,7 @@ jobs:
         shell: bash
         run: |
           wget https://raw.githubusercontent.com/humbletim/setup-vulkan-sdk/main/install_vulkan_sdk.sh -O install_vulkan_sdk.sh
+          chmod -x ./install_vulkan_sdk.sh
           ./install_vulkan_sdk.sh
 
       - name: Checkout
