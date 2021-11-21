@@ -52,9 +52,10 @@ endforeach ()
 
 add_custom_target(shaders ALL DEPENDS ${SPV_SHADERS})
 
-
 # Setup binary output
 add_executable(${BIN_NAME} ${SOURCES} ${SPV_SHADERS})
+
+set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall")
 
 # Link dependencies
 target_link_libraries(${BIN_NAME} glfw)

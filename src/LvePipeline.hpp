@@ -10,7 +10,18 @@
 #include <string>
 #include <vector>
 
-struct PipeLineConfigInfo {
+struct PipelineConfigInfo {
+    VkViewport viewport;
+    VkRect2D scissor;
+    VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
+    VkPipelineRasterizationStateCreateInfo rasterizationInfo;
+    VkPipelineMultisampleStateCreateInfo multisampleInfo;
+    VkPipelineColorBlendAttachmentState colorBlendAttachment;
+    VkPipelineColorBlendStateCreateInfo colorBlendInfo;
+    VkPipelineDepthStencilStateCreateInfo depthStencilInfo;
+    VkPipelineLayout pipelineLayout = nullptr;
+    VkRenderPass renderPass = nullptr;
+    uint32_t subpass = 0;
 };
 
 namespace lve {
@@ -19,22 +30,24 @@ namespace lve {
         LvePipeline(LveDevice &device,
                     const std::string &vert_file_path,
                     const std::string &frag_file_path,
-                    const PipeLineConfigInfo &config_info);
+                    const PipelineConfigInfo &config_info);
 
-        ~LvePipeline() {};
+        ~LvePipeline();
 
         LvePipeline(const LvePipeline &) = delete;
 
         void operator=(const LvePipeline &) = delete;
 
-        static PipeLineConfigInfo defaultPipelineConfigInfo(uint32_t width, uint32_t height);
+        void bind(VkCommandBuffer command_buffer);
+
+        static PipelineConfigInfo defaultPipelineConfigInfo(uint32_t width, uint32_t height);
 
     private:
         static std::vector<char> readFile(const std::string &file_path);
 
-        static void createGraphicsPipeline(const std::string &vert_file_path,
-                                           const std::string &frag_file_path,
-                                           const PipeLineConfigInfo &config_info);
+        void createGraphicsPipeline(const std::string &vert_file_path,
+                                    const std::string &frag_file_path,
+                                    const PipelineConfigInfo &config_info);
 
         void createShaderModule(const std::vector<char> &code, VkShaderModule *shader_module);
 
