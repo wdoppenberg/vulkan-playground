@@ -37,47 +37,28 @@ jobs:
           # Install build tools
           apt install -y \
             sudo \
-            jq \
             make \
             clang \
             cmake \
             curl \
             wget \
-            git \
-            gcc \
-            pkg-config \
-            build-essential \
-            libgl1-mesa-dev \
-            libx11-dev \
-            libx11-xcb-dev \
-            libxcb-dri3-dev \
-            libxcb-icccm4-dev \
-            libxcb-image0-dev \
-            libxcb-keysyms1-dev \
-            libxcb-randr0-dev \
-            libxcb-render-util0-dev \
-            libxcb-render0-dev \
-            libxcb-shape0-dev \
-            libxcb-sync-dev \
-            libxcb-util-dev \
-            libxcb-xfixes0-dev \
-            libxcb-xinerama0-dev \
-            libxcb-xkb-dev \
-            ninja-build \
-            libwayland-dev \
-            libxrandr-dev
+            git
 
       - name: Checkout
         uses: actions/checkout@v2
 
-      #      - name: Install Vulkan SDK
-      #        env:
-      #          INSTALL_VULKAN_SCRIPT_PATH: .github/scripts/install_vulkan_sdk.sh
-      #        shell: bash
-      #        run: |
-      #          $INSTALL_VULKAN_SCRIPT_PATH
       - name: Install Vulkan SDK
         uses: humbletim/setup-vulkan-sdk@v1.0.3
+
+      - name: Test Vulkan SDK Install
+        shell: bash
+        run: |
+          echo "Vulkan SDK Version=='$VULKAN_SDK_VERSION'"
+          echo "VULKAN_SDK=='$VULKAN_SDK'"
+          test -n "$VULKAN_SDK_VERSION"
+          cmake -B tests/build -S tests -DCMAKE_BUILD_TYPE=Release -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE=.
+          cmake --build tests/build --config release
+          PATH=$PATH:$PWD/VULKAN_SDK/bin
 
       - name: Build
         shell: bash
