@@ -49,7 +49,7 @@ jobs:
       - name: Install Vulkan SDK
         shell: bash
         run: |
-          wget https://raw.githubusercontent.com/humbletim/setup-vulkan-sdk/main/install_vulkan_sdk.sh install_vulkan_sdk.sh
+          wget https://raw.githubusercontent.com/humbletim/setup-vulkan-sdk/main/install_vulkan_sdk.sh -O install_vulkan_sdk.sh
           ./install_vulkan_sdk.sh
 
       - name: Checkout
