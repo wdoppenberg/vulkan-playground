@@ -33,9 +33,11 @@ jobs:
         shell: bash
         run: |
           # Update package lists
-          apt update -qq
+          apt-get update -qq
           # Install build tools
           apt-get install -y \
+            jq \
+            make \
             clang \
             cmake \
             curl \
@@ -45,8 +47,10 @@ jobs:
             build-essential
 
       - name: Install Vulkan SDK
-        uses: humbletim/setup-vulkan-sdk@v1.0.3
-
+        shell: bash
+        run: |
+          curl -K https://github.com/humbletim/setup-vulkan-sdk/blob/main/install_vulkan_sdk.sh -o install_vulkan_sdk.sh
+          install_vulkan_sdk.sh
 
       - name: Checkout
         uses: actions/checkout@v2
