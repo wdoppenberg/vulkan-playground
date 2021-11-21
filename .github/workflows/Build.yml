@@ -1,6 +1,9 @@
 name: Build
 on: [ push, pull_request ]
 
+env:
+  BUILD_TYPE: Release
+
 jobs:
   linux:
     name: ${{ matrix.config.name }}
@@ -40,12 +43,7 @@ jobs:
             pkg-config
 
       - name: Install Vulkan SDK
-        shell: bash
-        run: |
-          apt install -y \
-            libvulkan1 \
-            mesa-vulkan-drivers \
-            vulkan-utils
+        uses: humbletim/setup-vulkan-sdk@v1.0.3
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -53,13 +51,14 @@ jobs:
       - name: Configure CMake
         shell: bash
         run: |
+          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
           export CC=${{ matrix.config.cc }}
           export CXX=${{ matrix.config.cxx }}
 
       - name: Build
         shell: bash
         run: |
-          cmake --build build
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
       - name: Prepare upload
         run: |
