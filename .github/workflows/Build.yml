@@ -50,9 +50,8 @@ jobs:
       - name: Install Vulkan SDK
         shell: bash
         run: |
-          wget https://raw.githubusercontent.com/humbletim/setup-vulkan-sdk/main/install_vulkan_sdk.sh -O install_vulkan_sdk.sh
           chmod -x ./install_vulkan_sdk.sh && echo "Script now executable"
-          sh "./install_vulkan_sdk.sh"
+          .github/scripts/install_vulkan_sdk.sh
 
       - name: Checkout
         uses: actions/checkout@v2
