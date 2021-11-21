@@ -22,6 +22,7 @@ namespace lve {
         vkDeviceWaitIdle(lve_device.device());
     }
 
+
     void FirstApp::createPipelineLayout() {
         VkPipelineLayoutCreateInfo pipeline_layout_info{};
         pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
