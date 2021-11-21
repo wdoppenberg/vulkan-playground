@@ -40,7 +40,7 @@ jobs:
             make \
             clang \
             cmake \
-            curl \
+            wget \
             git \
             gcc \
             pkg-config \
@@ -49,8 +49,8 @@ jobs:
       - name: Install Vulkan SDK
         shell: bash
         run: |
-          curl -K https://github.com/humbletim/setup-vulkan-sdk/blob/main/install_vulkan_sdk.sh -o install_vulkan_sdk.sh
-          install_vulkan_sdk.sh
+          wget https://raw.githubusercontent.com/humbletim/setup-vulkan-sdk/main/install_vulkan_sdk.sh install_vulkan_sdk.sh
+          ./install_vulkan_sdk.sh
 
       - name: Checkout
         uses: actions/checkout@v2
