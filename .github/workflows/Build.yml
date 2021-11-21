@@ -43,8 +43,8 @@ jobs:
             wget \
             git \
             gcc \
-            pkg-config \
-            build-essential
+            pkg-config
+            curl
 
       - name: Install Vulkan SDK
         shell: bash
