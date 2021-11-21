@@ -36,10 +36,8 @@ jobs:
             cmake \
             curl \
             git \
-<<<<<<< HEAD
             gcc \
             pkg-config
-=======
             libgl1-mesa-dev \
             libx11-dev \
             libx11-xcb-dev \
