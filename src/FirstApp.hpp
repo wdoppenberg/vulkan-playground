@@ -42,13 +42,19 @@ namespace lve {
 
         void drawFrame();
 
+        void recreateSwapChain();
+
+        void recordCommandBuffer(const int &image_index);
+
         LveWindow lve_window{WIDTH, HEIGHT, "Hello Vulkan!"};
         LveDevice lve_device{lve_window};
-        LveSwapChain lve_swap_chain{lve_device, lve_window.getExtent()};
+        std::unique_ptr<LveSwapChain> lve_swap_chain;
         std::unique_ptr<LvePipeline> lve_pipeline;
         VkPipelineLayout pipeline_layout;
         std::vector<VkCommandBuffer> command_buffers;
         std::unique_ptr<LveModel> lve_model;
+
+        void freeCommandBuffers();
     };
 }
 

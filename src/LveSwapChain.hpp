@@ -6,6 +6,7 @@
 #include <vulkan/vulkan.h>
 
 // std lib headers
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -17,11 +18,14 @@ namespace lve {
 
         LveSwapChain(LveDevice &deviceRef, VkExtent2D windowExtent);
 
+        LveSwapChain(
+                LveDevice &deviceRef, VkExtent2D windowExtent, std::shared_ptr<LveSwapChain> previous);
+
         ~LveSwapChain();
 
         LveSwapChain(const LveSwapChain &) = delete;
 
-        void operator=(const LveSwapChain &) = delete;
+        LveSwapChain &operator=(const LveSwapChain &) = delete;
 
         VkFramebuffer getFrameBuffer(int index) { return swapChainFramebuffers[index]; }
 
@@ -35,11 +39,11 @@ namespace lve {
 
         VkExtent2D getSwapChainExtent() { return swapChainExtent; }
 
-        uint32_t width() const { return swapChainExtent.width; }
+        uint32_t width() { return swapChainExtent.width; }
 
-        uint32_t height() const { return swapChainExtent.height; }
+        uint32_t height() { return swapChainExtent.height; }
 
-        float extentAspectRatio() const {
+        float extentAspectRatio() {
             return static_cast<float>(swapChainExtent.width) / static_cast<float>(swapChainExtent.height);
         }
 
@@ -47,26 +51,23 @@ namespace lve {
 
         VkResult acquireNextImage(uint32_t *imageIndex);
 
-        VkResult submitCommandBuffers(const VkCommandBuffer *buffers, const uint32_t *imageIndex);
+        VkResult submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
 
     private:
+        void init();
+
         void createSwapChain();
-
         void createImageViews();
-
         void createDepthResources();
-
         void createRenderPass();
-
         void createFramebuffers();
-
         void createSyncObjects();
 
         // Helper functions
-        static VkSurfaceFormatKHR chooseSwapSurfaceFormat(
+        VkSurfaceFormatKHR chooseSwapSurfaceFormat(
                 const std::vector<VkSurfaceFormatKHR> &availableFormats);
 
-        static VkPresentModeKHR chooseSwapPresentMode(
+        VkPresentModeKHR chooseSwapPresentMode(
                 const std::vector<VkPresentModeKHR> &availablePresentModes);
 
         VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR &capabilities);
@@ -87,6 +88,7 @@ namespace lve {
         VkExtent2D windowExtent;
 
         VkSwapchainKHR swapChain;
+        std::shared_ptr<LveSwapChain> oldSwapChain;
 
         std::vector<VkSemaphore> imageAvailableSemaphores;
         std::vector<VkSemaphore> renderFinishedSemaphores;

@@ -8,7 +8,7 @@ jobs:
   linux:
     name: ${{ matrix.config.name }}
     runs-on: ubuntu-latest
-    container: ubuntu:rolling
+#    container: ubuntu:latest
     env:
       DEBIAN_FRONTEND: noninteractive
     strategy:
@@ -43,7 +43,8 @@ jobs:
             cmake \
             curl \
             wget \
-            git
+            git \
+            gcc
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -57,6 +58,7 @@ jobs:
           echo "Vulkan SDK Version=='$VULKAN_SDK_VERSION'"
           echo "VULKAN_SDK=='$VULKAN_SDK'"
           test -n "$VULKAN_SDK_VERSION"
+          ls $VULKAN_SDK
           PATH=$PATH:$PWD/VULKAN_SDK/bin
 
       - name: Build

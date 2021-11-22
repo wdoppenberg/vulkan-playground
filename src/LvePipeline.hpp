@@ -36,7 +36,7 @@ namespace lve {
 
         LvePipeline(const LvePipeline &) = delete;
 
-        void operator=(const LvePipeline &) = delete;
+        LvePipeline &operator=(const LvePipeline &) = delete;
 
         void bind(VkCommandBuffer command_buffer);
 
