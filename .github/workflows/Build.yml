@@ -58,15 +58,6 @@ jobs:
           sudo apt update
           sudo apt install -y vulkan-sdk
 
-      # - name: Test Vulkan SDK Install
-      #   shell: bash
-      #   run: |
-      #     echo "Vulkan SDK Version=='$VULKAN_SDK_VERSION'"
-      #     echo "VULKAN_SDK=='$VULKAN_SDK'"
-      #     test -n "$VULKAN_SDK_VERSION"
-      #     ls $VULKAN_SDK
-      #     PATH=$PATH:$PWD/VULKAN_SDK/bin
-
       - name: Build
         shell: bash
         run: |
@@ -76,7 +67,7 @@ jobs:
           export PATH=$VULKAN_SDK/bin:$PATH
           export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
           export VK_LAYER_PATH=$VULKAN_SDK/etc/explicit_layer.d
-          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          cmake -S ${{github.workspace}} -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
       - name: Prepare upload
         run: |
