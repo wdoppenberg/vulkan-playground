@@ -44,7 +44,8 @@ jobs:
             curl \
             wget \
             git \
-            gcc
+            gcc \
+            gnupg2
 
       - name: Checkout
         uses: actions/checkout@v2
