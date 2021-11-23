@@ -44,7 +44,7 @@ jobs:
             curl \
             wget \
             git \
-            gcc \
+            build-essential \
             gnupg2
 
       - name: Checkout
