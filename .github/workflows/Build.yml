@@ -47,9 +47,6 @@ jobs:
             build-essential \
             gnupg2
 
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Install Vulkan SDK
         shell: bash
         run: |
@@ -58,15 +55,15 @@ jobs:
           sudo apt update
           sudo apt install -y vulkan-sdk
 
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Build
         shell: bash
         run: |
           export CC=${{ matrix.config.cc }}
           export CXX=${{ matrix.config.cxx }}
-          export VULKAN_SDK=${{github.workspace}}/VULKAN_SDK
-          export PATH=$VULKAN_SDK/bin:$PATH
-          export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
-          export VK_LAYER_PATH=$VULKAN_SDK/etc/explicit_layer.d
+          mkdir build
           cmake --build build/ --target all -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
       - name: Prepare upload
