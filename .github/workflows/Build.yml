@@ -48,7 +48,7 @@ jobs:
             gnupg2 \
             libglm-dev \
             libglfw3 \
-            bglfw3-dev
+            libglfw3-dev
 
       - name: Install GLSLC
         shell: bash
