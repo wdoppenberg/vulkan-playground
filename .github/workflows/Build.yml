@@ -56,7 +56,7 @@ jobs:
           GLSLC_CLANG_GAPI: https://storage.googleapis.com/shaderc/artifacts/prod/graphics_shader_compiler/shaderc/linux/continuous_clang_release/373/20211122-073732/install.tgz
         run: |
           mkdir tmp
-          wget -O tmp/shaderc_clang.tgz $GLSLC_CLANG_GAPI
+          wget -q -O tmp/shaderc_clang.tgz $GLSLC_CLANG_GAPI
           tar -xvf tmp/shaderc_clang.tgz install/bin/glslc
           cp install/bin/glslc /usr/bin
           rm -r install
