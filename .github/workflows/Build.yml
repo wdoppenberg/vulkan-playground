@@ -46,7 +46,9 @@ jobs:
             git \
             build-essential \
             gnupg2 \
-            libglm-dev
+            libglm-dev \
+            libglfw3 \
+            bglfw3-dev
 
       - name: Install GLSLC
         shell: bash
