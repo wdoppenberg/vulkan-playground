@@ -67,11 +67,11 @@ jobs:
           export PATH=$VULKAN_SDK/bin:$PATH
           export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
           export VK_LAYER_PATH=$VULKAN_SDK/etc/explicit_layer.d
-          cmake -S ${{github.workspace}} -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          cmake --build build/ --target all -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
       - name: Prepare upload
         run: |
-          tar cfz ${{ matrix.config.artifact }} ${{github.workspace}}/build/
+          tar cfz ${{ matrix.config.artifact }} build/
 
       - name: Upload
         uses: actions/upload-artifact@v2
