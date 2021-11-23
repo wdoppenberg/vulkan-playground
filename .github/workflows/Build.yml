@@ -45,15 +45,23 @@ jobs:
             wget \
             git \
             build-essential \
-            gnupg2
+            gnupg2 \
+            libglm-dev
+
+      - name: Install GLSLC
+        shell: bash
+        env:
+          GLSLC_CLANG_GAPI: https://storage.googleapis.com/shaderc/artifacts/prod/graphics_shader_compiler/shaderc/linux/continuous_clang_release/373/20211122-073732/install.tgz
+        run: |
+          mkdir tmp
+          wget -O tmp/shaderc_clang.tgz $GLSLC_CLANG_GAPI
+          tar -xvf tmp/shaderc_clang.tgz install/bin/glslc
+          cp install/bin/glslc /usr/bin
+          rm -r install
+          rm -r tmp
 
       - name: Install Vulkan SDK
         shell: bash
-        # run: |
-        #   wget -qO - http://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
-        #   sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list http://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
-        #   sudo apt update
-        #   sudo apt install -y vulkan-sdk
         run: sudo apt-get install -y libvulkan-dev
 
       - name: Checkout
