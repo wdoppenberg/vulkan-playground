@@ -64,8 +64,8 @@ jobs:
           export CC=${{ matrix.config.cc }}
           export CXX=${{ matrix.config.cxx }}
           mkdir build
-          cmake build
-          cmake --build build/ --target all -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          cmake --build build/ --target all 
 
       - name: Prepare upload
         run: |
