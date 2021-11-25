@@ -32,7 +32,7 @@ namespace lve {
             return {static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
         }
 
-        bool wasWindowResized() { return frame_buffer_resized; }
+        bool wasWindowResized() const { return frame_buffer_resized; }
 
         void resetWindowResizedFlag() { frame_buffer_resized = false; }
 
