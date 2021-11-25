@@ -38,8 +38,12 @@ namespace lve {
     }
 
     void FirstApp::createPipeline() {
-        auto pipeline_config = LvePipeline::defaultPipelineConfigInfo(lve_swap_chain->width(),
-                                                                      lve_swap_chain->height());
+#ifndef NDEBUG
+        assert(lve_swap_chain != nullptr && "Cannot create pipeline before swapchain");
+        assert(pipeline_layout != nullptr && "Cannot create pipeline before pipeline layout");
+#endif
+        PipelineConfigInfo pipeline_config{};
+        LvePipeline::defaultPipelineConfigInfo(pipeline_config);
         pipeline_config.renderPass = lve_swap_chain->getRenderPass();
         pipeline_config.pipelineLayout = pipeline_layout;
         lve_pipeline = std::make_unique<LvePipeline>(
@@ -123,6 +127,17 @@ namespace lve {
         render_pass_info.pClearValues = clear_values.data();
 
         vkCmdBeginRenderPass(command_buffers[image_index], &render_pass_info, VK_SUBPASS_CONTENTS_INLINE);
+
+        VkViewport viewport{};
+        viewport.x = 0.0f;
+        viewport.y = 0.0f;
+        viewport.width = static_cast<float>(lve_swap_chain->getSwapChainExtent().width);
+        viewport.height = static_cast<float>(lve_swap_chain->getSwapChainExtent().height);
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+        VkRect2D scissor{{0, 0}, lve_swap_chain->getSwapChainExtent()};
+        vkCmdSetViewport(command_buffers[image_index], 0, 1, &viewport);
+        vkCmdSetScissor(command_buffers[image_index], 0, 1, &scissor);
 
         lve_pipeline->bind(command_buffers[image_index]);
         lve_model->bind(command_buffers[image_index]);

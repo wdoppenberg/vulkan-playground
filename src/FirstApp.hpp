@@ -46,6 +46,8 @@ namespace lve {
 
         void recordCommandBuffer(const int &image_index);
 
+        void freeCommandBuffers();
+
         LveWindow lve_window{WIDTH, HEIGHT, "Hello Vulkan!"};
         LveDevice lve_device{lve_window};
         std::unique_ptr<LveSwapChain> lve_swap_chain;
@@ -53,8 +55,6 @@ namespace lve {
         VkPipelineLayout pipeline_layout;
         std::vector<VkCommandBuffer> command_buffers;
         std::unique_ptr<LveModel> lve_model;
-
-        void freeCommandBuffers();
     };
 }
 

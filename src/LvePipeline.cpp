@@ -85,14 +85,6 @@ namespace lve {
         vertex_input_info.pVertexAttributeDescriptions = attribute_descriptions.data();
         vertex_input_info.pVertexBindingDescriptions = binding_descriptions.data();
 
-        VkPipelineViewportStateCreateInfo viewport_info{};
-        viewport_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-        viewport_info.pNext = nullptr;
-        viewport_info.flags = 0;
-        viewport_info.viewportCount = 1;
-        viewport_info.pViewports = &config_info.viewport;
-        viewport_info.scissorCount = 1;
-        viewport_info.pScissors = &config_info.scissor;
 
         VkGraphicsPipelineCreateInfo pipeline_info{};
         pipeline_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -100,12 +92,12 @@ namespace lve {
         pipeline_info.pStages = shaderStages;
         pipeline_info.pVertexInputState = &vertex_input_info;
         pipeline_info.pInputAssemblyState = &config_info.inputAssemblyInfo;
-        pipeline_info.pViewportState = &viewport_info;
+        pipeline_info.pViewportState = &config_info.viewportInfo;
         pipeline_info.pRasterizationState = &config_info.rasterizationInfo;
         pipeline_info.pMultisampleState = &config_info.multisampleInfo;
         pipeline_info.pColorBlendState = &config_info.colorBlendInfo;
         pipeline_info.pDepthStencilState = &config_info.depthStencilInfo;
-        pipeline_info.pDynamicState = nullptr;
+        pipeline_info.pDynamicState = &config_info.dynamicStateInfo;
 
         pipeline_info.layout = config_info.pipelineLayout;
         pipeline_info.renderPass = config_info.renderPass;
@@ -134,23 +126,17 @@ namespace lve {
         }
     }
 
-    PipelineConfigInfo LvePipeline::defaultPipelineConfigInfo(uint32_t width, uint32_t height) {
-        PipelineConfigInfo configInfo{};
+    void LvePipeline::defaultPipelineConfigInfo(PipelineConfigInfo &configInfo) {
 
         configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
         configInfo.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         configInfo.inputAssemblyInfo.primitiveRestartEnable = VK_FALSE;
 
-        configInfo.viewport.x = 0.0f;
-        configInfo.viewport.y = 0.0f;
-        configInfo.viewport.width = static_cast<float>(width);
-        configInfo.viewport.height = static_cast<float>(height);
-        configInfo.viewport.minDepth = 0.0f;
-        configInfo.viewport.maxDepth = 1.0f;
-
-        configInfo.scissor.offset = {0, 0};
-        configInfo.scissor.extent = {width, height};
-
+        configInfo.viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+        configInfo.viewportInfo.viewportCount = 1;
+        configInfo.viewportInfo.pViewports = nullptr;
+        configInfo.viewportInfo.scissorCount = 1;
+        configInfo.viewportInfo.pScissors = nullptr;
 
         configInfo.rasterizationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
         configInfo.rasterizationInfo.depthClampEnable = VK_FALSE;
@@ -204,7 +190,12 @@ namespace lve {
         configInfo.depthStencilInfo.front = {};  // Optional
         configInfo.depthStencilInfo.back = {};   // Optional
 
-        return configInfo;
+        configInfo.dynamicStateEnables = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
+        configInfo.dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+        configInfo.dynamicStateInfo.pDynamicStates = configInfo.dynamicStateEnables.data();
+        configInfo.dynamicStateInfo.dynamicStateCount =
+                static_cast<uint32_t>(configInfo.dynamicStateEnables.size());
+        configInfo.dynamicStateInfo.flags = 0;
     }
 
     void LvePipeline::bind(VkCommandBuffer command_buffer) {
