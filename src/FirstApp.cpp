@@ -1,9 +1,21 @@
 #include "FirstApp.hpp"
 
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+
+#include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
+
+struct SimplePushConstantData {
+    glm::mat2 transform{1.f};
+    glm::vec2 offset;
+    alignas(16) glm::vec3 color;
+};
+
 namespace lve {
 
     FirstApp::FirstApp() {
-        loadModels();
+        loadGameObjects();
         createPipelineLayout();
         recreateSwapChain();
         createCommandBuffers();
@@ -24,12 +36,19 @@ namespace lve {
 
 
     void FirstApp::createPipelineLayout() {
+
+        VkPushConstantRange pushConstantRange{};
+        pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+        pushConstantRange.offset = 0;
+        pushConstantRange.size = sizeof(SimplePushConstantData);
+
+
         VkPipelineLayoutCreateInfo pipeline_layout_info{};
         pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
         pipeline_layout_info.setLayoutCount = 0;
         pipeline_layout_info.pSetLayouts = nullptr;
-        pipeline_layout_info.pushConstantRangeCount = 0;
-        pipeline_layout_info.pPushConstantRanges = nullptr;
+        pipeline_layout_info.pushConstantRangeCount = 1;
+        pipeline_layout_info.pPushConstantRanges = &pushConstantRange;
 
         if (vkCreatePipelineLayout(lve_device.device(), &pipeline_layout_info, nullptr, &pipeline_layout) !=
             VK_SUCCESS) {
@@ -94,17 +113,27 @@ namespace lve {
         }
     }
 
-    void FirstApp::loadModels() {
+    void FirstApp::loadGameObjects() {
         std::vector<LveModel::Vertex> vertices{
                 {{0.0f,  -0.5f}, {1.0f, 0.0f, 0.0f}},
                 {{0.5f,  0.5f},  {0.0f, 1.0f, 0.0f}},
                 {{-0.5f, 0.5f},  {0.0f, 0.0f, 1.0f}}
         };
 
-        lve_model = std::make_unique<LveModel>(lve_device, vertices);
+        auto lve_model = std::make_shared<LveModel>(lve_device, vertices);
+
+        auto triangle = LveGameObject::createGameObject();
+        triangle.model = lve_model;
+        triangle.color = {.1f, .8f, .1f};
+        triangle.transform2d.translation.x = .2f;
+        triangle.transform2d.scale = {2.f, .5f};
+        triangle.transform2d.rotation = .25f * glm::two_pi<float>();
+
+        game_objects.push_back(std::move(triangle));
     }
 
     void FirstApp::recordCommandBuffer(const int &image_index) {
+
         VkCommandBufferBeginInfo begin_info{};
         begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
@@ -121,7 +150,7 @@ namespace lve {
         render_pass_info.renderArea.extent = lve_swap_chain->getSwapChainExtent();
 
         std::array<VkClearValue, 2> clear_values{};
-        clear_values[0].color = {0.1f, 0.1f, 0.1f, 1.0f};
+        clear_values[0].color = {0.01f, 0.01f, 0.01f, 1.0f};
         clear_values[1].depthStencil = {1.0f, 0};
         render_pass_info.clearValueCount = static_cast<uint32_t>(clear_values.size());
         render_pass_info.pClearValues = clear_values.data();
@@ -140,8 +169,7 @@ namespace lve {
         vkCmdSetScissor(command_buffers[image_index], 0, 1, &scissor);
 
         lve_pipeline->bind(command_buffers[image_index]);
-        lve_model->bind(command_buffers[image_index]);
-        lve_model->draw(command_buffers[image_index]);
+        renderGameObjects(command_buffers[image_index]);
 
         vkCmdEndRenderPass(command_buffers[image_index]);
 
@@ -177,5 +205,28 @@ namespace lve {
             }
         }
         createPipeline();
+    }
+
+    void FirstApp::renderGameObjects(VkCommandBuffer command_buffer) {
+        lve_pipeline->bind(command_buffer);
+
+        for (auto &obj: game_objects) {
+            obj.transform2d.rotation = glm::mod(obj.transform2d.rotation + 0.01f, glm::two_pi<float>());
+
+            SimplePushConstantData push{};
+            push.offset = obj.transform2d.translation;
+            push.color = obj.color;
+            push.transform = obj.transform2d.mat2();
+
+            vkCmdPushConstants(command_buffer,
+                               pipeline_layout,
+                               VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                               0,
+                               sizeof(SimplePushConstantData),
+                               &push);
+
+            obj.model->bind(command_buffer);
+            obj.model->draw(command_buffer);
+        }
     }
 }
