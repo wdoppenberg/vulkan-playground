@@ -18,12 +18,12 @@ namespace lve {
     class LveModel {
     public:
         struct Vertex {
-            glm::vec2 position;
-            glm::vec3 color;
+	        glm::vec2 m_position;
+	        glm::vec3 m_color;
 
-            static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
+	        static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
 
-            static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
+	        static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
         };
 
         LveModel(LveDevice &device, const std::vector<Vertex> &vertices);
@@ -32,19 +32,19 @@ namespace lve {
 
         LveModel(const LveModel &) = delete;
 
-        LveModel &operator=(const LveModel &) = delete;
+	    LveModel &operator=(const LveModel &) = delete;
 
-        void bind(VkCommandBuffer command_buffer);
+	    void bind(VkCommandBuffer commandBuffer);
 
-        void draw(VkCommandBuffer command_buffer) const;
+	    void draw(VkCommandBuffer commandBuffer) const;
 
     private:
-        void createVertexBuffers(const std::vector<Vertex> &vertices);
+	    void createVertexBuffers(const std::vector<Vertex> &vertices);
 
-        LveDevice &lve_device;
-        VkBuffer vertex_buffer;
-        VkDeviceMemory vertex_buffer_memory;
-        uint32_t vertex_count;
+	    LveDevice &m_lveDevice_;
+	    VkBuffer m_vertexBuffer_;
+	    VkDeviceMemory m_vertexBufferMemory_;
+	    uint32_t m_vertexCount_;
 
     };
 }

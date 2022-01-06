@@ -25,27 +25,27 @@ namespace lve {
         void initWindow();
 
         bool shouldClose() {
-            return glfwWindowShouldClose(window);
+            return glfwWindowShouldClose(m_window_);
         }
 
         VkExtent2D getExtent() const {
-            return {static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
+	        return {static_cast<uint32_t>(m_width_), static_cast<uint32_t>(m_height_)};
         }
 
-        bool wasWindowResized() const { return frame_buffer_resized; }
+	    bool wasWindowResized() const { return m_frameBufferResized_; }
 
-        void resetWindowResizedFlag() { frame_buffer_resized = false; }
+	    void resetWindowResizedFlag() { m_frameBufferResized_ = false; }
 
-        void createWindowSurface(VkInstance instance, VkSurfaceKHR *surface);
+	    void createWindowSurface(VkInstance instance, VkSurfaceKHR *surface);
 
     private:
-        static void frameBufferResizeCallback(GLFWwindow *window, int width, int height);
+	    static void frameBufferResizeCallback(GLFWwindow *window, int width, int height);
 
-        GLFWwindow *window;
-        int width, height;
-        bool frame_buffer_resized = false;
+	    GLFWwindow *m_window_;
+	    int m_width_, m_height_;
+	    bool m_frameBufferResized_ = false;
 
-        std::string window_name;
+	    std::string m_windowName_;
 
     };
 }

@@ -2,12 +2,12 @@
 
 layout (location = 0) out vec4 outColor;
 
-layout(push_constant) uniform Push {
-    mat2 transform;
-    vec2 offset;
-    vec3 color;
+layout (push_constant) uniform Push {
+    mat2 m_transform;
+    vec2 m_offset;
+    vec3 m_color;
 } push;
 
 void main() {
-    outColor = vec4(push.color, 1.0);
+    outColor = vec4(push.m_color, 1.0);
 }

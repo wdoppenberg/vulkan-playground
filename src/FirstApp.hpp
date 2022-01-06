@@ -1,7 +1,6 @@
 //
 // Created by wdoppenberg on 20-11-21.
 //
-#pragma once
 
 #ifndef VULKAN_TEST_FIRSTAPP_HPP
 #define VULKAN_TEST_FIRSTAPP_HPP
@@ -12,6 +11,7 @@
 #include "LveDevice.hpp"
 #include "LveSwapChain.hpp"
 #include "LveModel.hpp"
+#include "LveRenderer.hpp"
 
 #include <memory>
 #include <vector>
@@ -20,44 +20,25 @@
 namespace lve {
     class FirstApp {
     public:
-        static constexpr int WIDTH = 800, HEIGHT = 600;
+	    static constexpr int m_width = 800, m_height = 600;
 
         FirstApp();
 
         ~FirstApp();
 
-        FirstApp(const FirstApp &) = delete;
+	    FirstApp(const FirstApp &) = delete;
 
-        FirstApp &operator=(const FirstApp &) = delete;
+	    FirstApp &operator=(const FirstApp &) = delete;
 
-        void run();
+	    void run();
 
     private:
-        void loadGameObjects();
+	    void loadGameObjects();
 
-        void createPipelineLayout();
-
-        void createPipeline();
-
-        void createCommandBuffers();
-
-        void drawFrame();
-
-        void recreateSwapChain();
-
-        void recordCommandBuffer(const int &image_index);
-
-        void freeCommandBuffers();
-
-        void renderGameObjects(VkCommandBuffer command_buffer);
-
-        LveWindow lve_window{WIDTH, HEIGHT, "Hello Vulkan!"};
-        LveDevice lve_device{lve_window};
-        std::unique_ptr<LveSwapChain> lve_swap_chain;
-        std::unique_ptr<LvePipeline> lve_pipeline;
-        VkPipelineLayout pipeline_layout;
-        std::vector<VkCommandBuffer> command_buffers;
-        std::vector<LveGameObject> game_objects;
+	    LveWindow m_lveWindow_{m_width, m_height, "Hello Vulkan!"};
+	    LveDevice m_lveDevice_{m_lveWindow_};
+	    LveRenderer m_lveRenderer_{m_lveWindow_, m_lveDevice_};
+	    std::vector<LveGameObject> m_gameObjects_;
     };
 }
 
