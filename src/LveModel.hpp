@@ -18,7 +18,7 @@ namespace lve {
     class LveModel {
     public:
         struct Vertex {
-	        glm::vec2 m_position;
+	        glm::vec3 m_position;
 	        glm::vec3 m_color;
 
 	        static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();

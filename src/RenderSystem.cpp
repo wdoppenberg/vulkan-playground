@@ -12,8 +12,7 @@
 
 namespace lve {
 	struct SimplePushConstantData {
-		glm::mat2 m_transform{1.f};
-		glm::vec2 m_offset;
+		glm::mat4 m_transform{1.f};
 		alignas(16) glm::vec3 m_color;
 	};
 
@@ -58,8 +57,8 @@ namespace lve {
 		pipelineConfig.m_pipelineLayout = m_pipelineLayout_;
 		m_lvePipeline_ = std::make_unique<LvePipeline>(
 				m_lveDevice_,
-				"src/shaders/simple_shader.vert.spv",
-				"src/shaders/simple_shader.frag.spv",
+				"src/shaders/simple_vertex.vert.spv",
+				"src/shaders/simple_fragment.frag.spv",
 				pipelineConfig
 		);
 	}
@@ -69,12 +68,12 @@ namespace lve {
 		m_lvePipeline_->bind(commandBuffer);
 
 		for (auto &obj: gameObjects) {
-			obj.m_transform2D.m_rotation = glm::mod(obj.m_transform2D.m_rotation + 0.01f, glm::two_pi<float>());
+			obj.m_transform.m_rotation.y = glm::mod(obj.m_transform.m_rotation.y + 0.01f, glm::two_pi<float>());
+			obj.m_transform.m_rotation.x = glm::mod(obj.m_transform.m_rotation.x + 0.01f, glm::two_pi<float>());
 
 			SimplePushConstantData push{};
-			push.m_offset = obj.m_transform2D.m_translation;
 			push.m_color = obj.m_color;
-			push.m_transform = obj.m_transform2D.mat2();
+			push.m_transform = obj.m_transform.mat4();
 
 			vkCmdPushConstants(commandBuffer,
 			                   m_pipelineLayout_,

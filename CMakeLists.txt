@@ -25,6 +25,7 @@ file(GLOB SHADERS
         ${SHADER_SOURCE_DIR}/*.comp
         ${SHADER_SOURCE_DIR}/*.geom
         ${SHADER_SOURCE_DIR}/*.glsl
+        ${SHADER_SOURCE_DIR}/*.shader
         )
 
 add_custom_command(

@@ -66,7 +66,7 @@ namespace lve {
 
     std::vector<VkVertexInputAttributeDescription> LveModel::Vertex::getAttributeDescriptions() {
         return {
-		        {0, 0, VK_FORMAT_R32G32_SFLOAT,    offsetof(Vertex, m_position)},
+		        {0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, m_position)},
 		        {1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, m_color)}
         };
     }
