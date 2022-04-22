@@ -23,6 +23,9 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    container: ubuntu:rolling
+    env:
+      DEBIAN_FRONTEND: noninteractive
 
     strategy:
       fail-fast: false
