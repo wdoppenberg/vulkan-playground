@@ -39,6 +39,43 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+      
+    - name: Update environment
+      shell: bash
+      run: |
+        # Update package lists
+        apt update -qq
+        # Install build tools
+        apt install -y \
+          sudo \
+          jq \
+          make \
+          clang \
+          cmake \
+          curl \
+          wget \
+          git \
+          build-essential \
+          gnupg2 \
+          libglm-dev \
+          libglfw3 \
+          libglfw3-dev
+      
+    - name: Install GLSLC
+      shell: bash
+      env:
+        GLSLC_CLANG_GAPI: https://storage.googleapis.com/shaderc/artifacts/prod/graphics_shader_compiler/shaderc/linux/continuous_clang_release/373/20211122-073732/install.tgz
+      run: |
+        mkdir tmp
+        wget -q -O tmp/shaderc_clang.tgz $GLSLC_CLANG_GAPI
+        tar -xvf tmp/shaderc_clang.tgz install/bin/glslc
+        cp install/bin/glslc /usr/bin
+        rm -r install
+        rm -r tmp
+      
+    - name: Install Vulkan SDK
+      shell: bash
+      run: sudo apt-get install -y libvulkan-dev
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
