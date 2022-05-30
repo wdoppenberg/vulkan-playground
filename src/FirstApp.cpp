@@ -1,12 +1,14 @@
 #include "FirstApp.hpp"
 #include "RenderSystem.hpp"
 #include "LveCamera.hpp"
+#include "KeyboardMovementController.hpp"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
+#include <chrono>
 
 
 namespace lve {
@@ -18,20 +20,33 @@ namespace lve {
 	FirstApp::~FirstApp() {}
 
 	void FirstApp::run() {
-		loadGameObjects();
+		RenderSystem simpleRenderSystem{m_lveDevice_, m_lveRenderer_.getSwapChainRenderPass()};
 		LveCamera camera{};
+		camera.setViewTarget(glm::vec3{-1.f, -2.f, 2.f}, glm::vec3{0.f, 0.f, 2.5f});
+		auto viewerObject = LveGameObject::createGameObject();
+		KeyboardMovementController cameraController{};
+
 		float aspect = m_lveRenderer_.getAspectRatio();
 
-		RenderSystem simpleRenderSystem{m_lveDevice_, m_lveRenderer_.getSwapChainRenderPass()};
+
+		auto currentTime = std::chrono::high_resolution_clock::now();
 
 		while (!m_lveWindow_.shouldClose()) {
 			glfwPollEvents();
+
+			auto newTime = std::chrono::high_resolution_clock::now();
+			float frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
+			currentTime = newTime;
+
+			frameTime = std::min(frameTime, 0.1f);
+
+			cameraController.moveInPlaneXZ(m_lveWindow_.getWindow(), frameTime, viewerObject);
+			camera.setViewYXZ(viewerObject.m_transform.m_translation, viewerObject.m_transform.m_rotation);
+
 			aspect = m_lveRenderer_.getAspectRatio();
 //			camera.setOrthographicProjection(-aspect, aspect, -1., 1., -1., 1.);
 			camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 10.f);
 			if (auto commandBuffer = m_lveRenderer_.beginFrame()) {
-
-
 				// render system
 				m_lveRenderer_.beginSwapChainRenderPass(commandBuffer);
 				simpleRenderSystem.renderGameObjects(commandBuffer, m_gameObjects_, camera);
