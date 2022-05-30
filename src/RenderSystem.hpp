@@ -5,10 +5,12 @@
 #ifndef VULKAN_TEST_RENDERSYSTEM_HPP
 #define VULKAN_TEST_RENDERSYSTEM_HPP
 
+#include "LveCamera.hpp"
 #include "LvePipeline.hpp"
 #include "LveGameObject.hpp"
 #include "LveDevice.hpp"
 
+// std
 #include <memory>
 #include <vector>
 #include <stdexcept>
@@ -25,7 +27,8 @@ namespace lve {
 
 		RenderSystem &operator=(const RenderSystem &) = delete;
 
-		void renderGameObjects(VkCommandBuffer commandBuffer, std::vector<LveGameObject> &gameObjects);
+		void renderGameObjects(VkCommandBuffer commandBuffer, std::vector<LveGameObject> &gameObjects,
+		                       const LveCamera &camera);
 
 	private:
 		void createPipelineLayout();

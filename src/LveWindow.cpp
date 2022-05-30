@@ -28,7 +28,6 @@ namespace lve {
 	    if (glfwCreateWindowSurface(instance, m_window_, nullptr, surface) != VK_SUCCESS) {
 		    throw std::runtime_error("Failed to create window surface.");
 	    }
-
     }
 
     void LveWindow::frameBufferResizeCallback(GLFWwindow *window, int width, int height) {
